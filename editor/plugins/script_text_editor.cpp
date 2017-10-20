@@ -1467,6 +1467,10 @@ void ScriptTextEditor::_make_context_menu(bool p_selection, bool p_color) {
 		context_menu->add_separator();
 		context_menu->add_item(TTR("Pick Color"), EDIT_PICK_COLOR);
 	}
+
+	context_menu->add_separator();
+	context_menu->add_shortcut(ED_GET_SHORTCUT("script_text_editor/lookup_symbol"), LOOKUP_SYMBOL);
+
 	context_menu->set_position(get_global_transform().xform(get_local_mouse_position()));
 	context_menu->set_size(Vector2(1, 1));
 	context_menu->popup();
@@ -1631,6 +1635,7 @@ void ScriptTextEditor::register_editor() {
 	ED_SHORTCUT("script_text_editor/goto_line", TTR("Goto Line.."), KEY_MASK_CMD | KEY_L);
 
 	ED_SHORTCUT("script_text_editor/contextual_help", TTR("Contextual Help"), KEY_MASK_SHIFT | KEY_F1);
+	ED_SHORTCUT("script_text_editor/lookup_symbol", TTR("Open Reference"), 0);
 
 	ScriptEditor::register_create_script_editor_function(create_editor);
 }
