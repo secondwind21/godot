@@ -102,6 +102,7 @@ class ScriptTextEditor : public ScriptEditorBase {
 		DEBUG_GOTO_NEXT_BREAKPOINT,
 		DEBUG_GOTO_PREV_BREAKPOINT,
 		HELP_CONTEXTUAL,
+		LOOKUP_SYMBOL
 	};
 
 protected:
