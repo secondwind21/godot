@@ -543,7 +543,7 @@ public:
 	PopupMenu *get_menu() const;
 
 	String get_text_for_completion();
-	String get_text_for_lookup_completion();
+	String get_text_for_lookup_completion(int row, int col);
 
 	virtual bool is_text_field() const;
 	TextEdit();

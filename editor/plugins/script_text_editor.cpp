@@ -739,7 +739,7 @@ void ScriptTextEditor::_lookup_symbol(const String &p_symbol, int p_row, int p_c
 			EditorNode::get_singleton()->load_resource(p_symbol);
 		}
 
-	} else if (script->get_language()->lookup_code(code_editor->get_text_edit()->get_text_for_lookup_completion(), p_symbol, script->get_path().get_base_dir(), base, result) == OK) {
+	} else if (script->get_language()->lookup_code(code_editor->get_text_edit()->get_text_for_lookup_completion(p_row, p_column), p_symbol, script->get_path().get_base_dir(), base, result) == OK) {
 
 		_goto_line(p_row);
 
@@ -1213,6 +1213,17 @@ void ScriptTextEditor::_edit_option(int p_op) {
 				emit_signal("request_help_search", text);
 			}
 		} break;
+
+		case LOOKUP_SYMBOL: {
+			TextEdit *te = code_editor->get_text_edit();
+			int row = te->cursor_get_line();
+			int col = te->cursor_get_column();
+			String symbol = te->get_selection_text();
+			if (symbol == "")
+				symbol = te->get_word_under_cursor();
+			if (symbol != "")
+				_lookup_symbol(symbol, row, col);
+		} break;
 	}
 }
 
@@ -1564,6 +1575,7 @@ ScriptTextEditor::ScriptTextEditor() {
 	search_menu->get_popup()->add_shortcut(ED_GET_SHORTCUT("script_text_editor/goto_line"), SEARCH_GOTO_LINE);
 	search_menu->get_popup()->add_separator();
 	search_menu->get_popup()->add_shortcut(ED_GET_SHORTCUT("script_text_editor/contextual_help"), HELP_CONTEXTUAL);
+	search_menu->get_popup()->add_shortcut(ED_GET_SHORTCUT("script_text_editor/lookup_symbol"), LOOKUP_SYMBOL);
 
 	search_menu->get_popup()->connect("id_pressed", this, "_edit_option");
 
@@ -1631,6 +1643,7 @@ void ScriptTextEditor::register_editor() {
 	ED_SHORTCUT("script_text_editor/goto_line", TTR("Goto Line.."), KEY_MASK_CMD | KEY_L);
 
 	ED_SHORTCUT("script_text_editor/contextual_help", TTR("Contextual Help"), KEY_MASK_SHIFT | KEY_F1);
+	ED_SHORTCUT("script_text_editor/lookup_symbol", TTR("Open Reference"), 0);
 
 	ScriptEditor::register_create_script_editor_function(create_editor);
 }

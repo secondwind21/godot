@@ -3520,10 +3520,7 @@ String TextEdit::get_text() {
 	return longthing;
 };
 
-String TextEdit::get_text_for_lookup_completion() {
-
-	int row, col;
-	_get_mouse_pos(get_local_mouse_position(), row, col);
+String TextEdit::get_text_for_lookup_completion(int row, int col) {
 
 	String longthing;
 	int len = text.size();
