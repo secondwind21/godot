@@ -1479,12 +1479,26 @@ void ScriptTextEditor::_make_context_menu(bool p_selection, bool p_color) {
 		context_menu->add_item(TTR("Pick Color"), EDIT_PICK_COLOR);
 	}
 
+	//Lookup will fail if we're selecting multiple lines, because there's nothing to reference
+	if (!p_selection || !_is_selection_multiline())
+	{ 
+		context_menu->add_separator();
+		context_menu->add_shortcut(ED_GET_SHORTCUT("script_text_editor/lookup_symbol"), LOOKUP_SYMBOL);
+	}
+
 	context_menu->add_separator();
 	context_menu->add_shortcut(ED_GET_SHORTCUT("script_text_editor/lookup_symbol"), LOOKUP_SYMBOL);
 
 	context_menu->set_position(get_global_transform().xform(get_local_mouse_position()));
 	context_menu->set_size(Vector2(1, 1));
 	context_menu->popup();
+}
+
+bool ScriptTextEditor::_is_selection_multiline()
+{
+	TextEdit *te = code_editor->get_text_edit();
+	int number_of_selected_lines = te->get_selection_to_line() - te->get_selection_from_line();
+	return (number_of_selected_lines != 0);
 }
 
 ScriptTextEditor::ScriptTextEditor() {
